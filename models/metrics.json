@@ -1,0 +1,79 @@
+{
+  "Linear Regression": {
+    "train": {
+      "MAE": 3998.76,
+      "RMSE": 10863.43,
+      "R2": 0.725
+    },
+    "test": {
+      "MAE": 5171.42,
+      "RMSE": 8039.52,
+      "R2": 0.57
+    }
+  },
+  "Random Forest": {
+    "train": {
+      "MAE": 1777.88,
+      "RMSE": 6723.47,
+      "R2": 0.895
+    },
+    "test": {
+      "MAE": 2765.39,
+      "RMSE": 6099.47,
+      "R2": 0.752
+    }
+  },
+  "top_features_rf": [
+    {
+      "feature": "dien_tich",
+      "importance": 0.6018917193082508,
+      "display_name": "Diện tích (m²)"
+    },
+    {
+      "feature": "so_tang",
+      "importance": 0.2690355531512362,
+      "display_name": "Số tầng"
+    },
+    {
+      "feature": "so_phong_tam",
+      "importance": 0.013936105783114884,
+      "display_name": "Phòng tắm"
+    },
+    {
+      "feature": "so_phong_ngu",
+      "importance": 0.011425989212557967,
+      "display_name": "Phòng ngủ"
+    },
+    {
+      "feature": "phuong_xa_Phường Tây Hồ",
+      "importance": 0.010392182439788001,
+      "display_name": "Phường Phường Tây Hồ"
+    },
+    {
+      "feature": "phuong_xa_Phường Thụy Khuê",
+      "importance": 0.00925672581210485,
+      "display_name": "Phường Phường Thụy Khuê"
+    },
+    {
+      "feature": "quan_huyen_Tây Hồ",
+      "importance": 0.0072053124362232625,
+      "display_name": "Quận Tây Hồ"
+    },
+    {
+      "feature": "nam_xay_dung",
+      "importance": 0.006734741596041109,
+      "display_name": "Năm xây dựng"
+    },
+    {
+      "feature": "phuong_xa_Phường Cát Linh",
+      "importance": 0.005586888628573486,
+      "display_name": "Phường Phường Cát Linh"
+    },
+    {
+      "feature": "phuong_xa_Phường Thanh Xuân",
+      "importance": 0.005386613043960439,
+      "display_name": "Phường Phường Thanh Xuân"
+    }
+  ],
+  "importance_comment": "'Diện tích (m²)' là yếu tố ảnh hưởng mạnh nhất đến giá bán nhà (chiếm 60.2% mức độ quan trọng), tiếp theo là 'Số tầng'. Vị trí quận/huyện và quy mô công trình đóng vai trò quyết định trong việc định giá."
+}
