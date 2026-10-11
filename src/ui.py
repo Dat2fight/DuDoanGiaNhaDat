@@ -20,14 +20,115 @@ def apply_custom_css():
             z-index: 1;
         }
 
-        /* Sidebar màu navy đậm */
-        [data-testid="stSidebar"] {
+        /* Sidebar màu navy đậm & toàn bộ chữ mặc định */
+        section[data-testid="stSidebar"] {
             background-color: #0f172a !important;
-            color: #f8fafc !important;
+            color: #ffffff !important;
         }
-        [data-testid="stSidebar"] .stMarkdown p,
-        [data-testid="stSidebar"] .stMarkdown span {
+        section[data-testid="stSidebar"] .stMarkdown p,
+        section[data-testid="stSidebar"] .stMarkdown span {
             color: #cbd5e1 !important;
+        }
+
+        /* Chuyển các chữ trong menu điều hướng Sidebar thành màu trắng rõ nét */
+        [data-testid="stSidebarNav"] {
+            background-color: transparent !important;
+            padding-top: 8px !important;
+        }
+        [data-testid="stSidebarNav"] ul {
+            padding: 0 !important;
+        }
+        [data-testid="stSidebarNav"] li {
+            margin-bottom: 4px !important;
+        }
+        [data-testid="stSidebarNav"] a,
+        [data-testid="stSidebarNav"] a span,
+        [data-testid="stSidebarNavItems"] a,
+        [data-testid="stSidebarNavItems"] a span,
+        [data-testid="stSidebarNavLink"],
+        [data-testid="stSidebarNavLink"] span,
+        section[data-testid="stSidebar"] nav a,
+        section[data-testid="stSidebar"] nav a span,
+        section[data-testid="stSidebar"] nav ul li a,
+        section[data-testid="stSidebar"] nav ul li a span {
+            color: #ffffff !important;
+            font-weight: 500 !important;
+            font-size: 14px !important;
+            text-decoration: none !important;
+            transition: all 0.2s ease !important;
+        }
+
+        /* Hiệu ứng hover menu */
+        [data-testid="stSidebarNav"] a:hover,
+        [data-testid="stSidebarNav"] a:hover span,
+        [data-testid="stSidebarNavLink"]:hover,
+        [data-testid="stSidebarNavLink"]:hover span,
+        section[data-testid="stSidebar"] nav ul li a:hover {
+            color: #ffffff !important;
+            background-color: rgba(255, 255, 255, 0.12) !important;
+            border-radius: 8px !important;
+        }
+
+        /* Tab trang đang được chọn (Active) */
+        [data-testid="stSidebarNav"] a[aria-current="page"],
+        [data-testid="stSidebarNav"] a[aria-current="page"] span,
+        [data-testid="stSidebarNavLink"][aria-current="page"],
+        [data-testid="stSidebarNavLink"][aria-current="page"] span,
+        section[data-testid="stSidebar"] nav ul li a[aria-current="page"],
+        section[data-testid="stSidebar"] nav ul li a[aria-current="page"] span {
+            color: #ffffff !important;
+            font-weight: 700 !important;
+            background-color: #2563eb !important;
+            border-radius: 8px !important;
+        }
+
+        /* Icon SVG trong sidebar nav */
+        [data-testid="stSidebarNav"] svg,
+        [data-testid="stSidebarNavLink"] svg {
+            fill: #ffffff !important;
+            color: #ffffff !important;
+        }
+
+        /* Định kiểu ô Selectbox: nền trắng, chữ đen, viền rõ nét */
+        div[data-baseweb="select"] > div {
+            background-color: #ffffff !important;
+            border: 1px solid #cbd5e1 !important;
+            border-radius: 8px !important;
+            color: #0f172a !important;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05) !important;
+        }
+
+        /* Chữ bên trong ô Selectbox */
+        div[data-baseweb="select"] * {
+            color: #0f172a !important;
+        }
+
+        /* Mũi tên góc phải của Selectbox */
+        div[data-baseweb="select"] svg {
+            fill: #475569 !important;
+        }
+
+        /* Danh sách dropdown khi bấm mở ô chọn */
+        ul[data-testid="stSelectboxVirtualDropdown"],
+        div[data-baseweb="popover"] {
+            background-color: #ffffff !important;
+        }
+        ul[data-testid="stSelectboxVirtualDropdown"] li,
+        div[data-baseweb="menu"] li {
+            background-color: #ffffff !important;
+            color: #0f172a !important;
+        }
+        ul[data-testid="stSelectboxVirtualDropdown"] li:hover,
+        div[data-baseweb="menu"] li:hover {
+            background-color: #f1f5f9 !important;
+            color: #2563eb !important;
+        }
+
+        /* Nhãn Label của các widget / selectbox */
+        div[data-testid="stWidgetLabel"] p,
+        label[data-testid="stWidgetLabel"] {
+            color: #0f172a !important;
+            font-weight: 600 !important;
         }
 
         /* Thẻ Card bo góc */
@@ -214,18 +315,3 @@ def render_sidebar_info():
             """,
             unsafe_allow_html=True,
         )
-
-
-def render_top_badge(title: str = "Bài tập lớn môn Khoa học Dữ liệu"):
-    """Hiển thị huy hiệu góc phải phía trên."""
-    st.markdown(
-        f"""
-        <div style="display: flex; justify-content: flex-end; margin-bottom: 10px;">
-            <div class="top-badge">
-                <span>🎓</span> {title}
-            </div>
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
-

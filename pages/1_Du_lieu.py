@@ -5,7 +5,7 @@ from pathlib import Path
 import pandas as pd
 import streamlit as st
 
-from src.ui import apply_custom_css, render_sidebar_info, render_top_badge
+from src.ui import apply_custom_css, render_sidebar_info
 
 st.set_page_config(
     page_title="HouseInsight - Dữ liệu",
@@ -16,7 +16,6 @@ st.set_page_config(
 
 apply_custom_css()
 render_sidebar_info()
-render_top_badge("Bài tập lớn môn Khoa học Dữ liệu")
 
 # Tiêu đề trang
 col_title, col_btn = st.columns([3, 1])
