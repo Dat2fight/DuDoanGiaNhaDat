@@ -1,79 +1,79 @@
 {
   "Linear Regression": {
     "train": {
-      "MAE": 3995.54,
-      "RMSE": 10864.47,
+      "MAE": 4010.46,
+      "RMSE": 10859.23,
       "R2": 0.725
     },
     "test": {
-      "MAE": 5163.68,
-      "RMSE": 8033.99,
-      "R2": 0.571
+      "MAE": 5208.9,
+      "RMSE": 8060.49,
+      "R2": 0.568
     }
   },
   "Random Forest": {
     "train": {
-      "MAE": 1777.73,
-      "RMSE": 6720.63,
-      "R2": 0.895
+      "MAE": 1782.93,
+      "RMSE": 6813.16,
+      "R2": 0.892
     },
     "test": {
-      "MAE": 2756.94,
-      "RMSE": 6059.6,
-      "R2": 0.756
+      "MAE": 2762.98,
+      "RMSE": 6131.89,
+      "R2": 0.75
     }
   },
   "top_features_rf": [
     {
       "feature": "dien_tich",
-      "importance": 0.5922335593286735,
+      "importance": 0.6132981242094702,
       "display_name": "Diện tích (m²)"
     },
     {
       "feature": "so_tang",
-      "importance": 0.27930146508936454,
+      "importance": 0.26187781358522494,
       "display_name": "Số tầng"
     },
     {
+      "feature": "so_phong_ngu",
+      "importance": 0.010749492749421876,
+      "display_name": "Phòng ngủ"
+    },
+    {
       "feature": "so_phong_tam",
-      "importance": 0.010813417397597334,
+      "importance": 0.009740998796518522,
       "display_name": "Phòng tắm"
     },
     {
       "feature": "phuong_xa_Phường Tây Hồ",
-      "importance": 0.010146362851413326,
+      "importance": 0.008195306100807306,
       "display_name": "Phường Phường Tây Hồ"
     },
     {
-      "feature": "so_phong_ngu",
-      "importance": 0.009016287330481659,
-      "display_name": "Phòng ngủ"
-    },
-    {
       "feature": "phuong_xa_Phường Thụy Khuê",
-      "importance": 0.00794877293100008,
+      "importance": 0.007531035981435639,
       "display_name": "Phường Phường Thụy Khuê"
     },
     {
       "feature": "nam_xay_dung",
-      "importance": 0.007414880669089746,
+      "importance": 0.006769049212235307,
       "display_name": "Năm xây dựng"
     },
     {
       "feature": "quan_huyen_Long Biên",
-      "importance": 0.006599022701508926,
+      "importance": 0.006730660402959805,
       "display_name": "Quận Long Biên"
     },
     {
-      "feature": "phuong_xa_Phường Ngọc Thụy",
-      "importance": 0.006416769267915779,
-      "display_name": "Phường Phường Ngọc Thụy"
+      "feature": "quan_huyen_Tây Hồ",
+      "importance": 0.005719598560210755,
+      "display_name": "Quận Tây Hồ"
     },
     {
-      "feature": "phuong_xa_Phường Thanh Xuân",
-      "importance": 0.005780471689326417,
-      "display_name": "Phường Phường Thanh Xuân"
+      "feature": "phuong_xa_Phường Cát Linh",
+      "importance": 0.005712155643555216,
+      "display_name": "Phường Phường Cát Linh"
     }
   ],
-  "importance_comment": "'Diện tích (m²)' là yếu tố ảnh hưởng mạnh nhất đến giá bán nhà (chiếm 59.2% mức độ quan trọng), tiếp theo là 'Số tầng'. Vị trí quận/huyện và quy mô công trình đóng vai trò quyết định trong việc định giá."
+  "importance_comment": "'Diện tích (m²)' là yếu tố ảnh hưởng mạnh nhất đến giá bán nhà (chiếm 61.3% mức độ quan trọng), tiếp theo là 'Số tầng'. Vị trí quận/huyện và quy mô công trình đóng vai trò quyết định trong việc định giá."
 }

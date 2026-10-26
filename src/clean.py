@@ -106,22 +106,58 @@ def clean_house_data(
     ]
     df = df[columns_order]
 
-    # 6. Điền giá trị thiếu bằng trung bình của cùng loại dữ liệu (Mean Imputation)
-    # Các cột số: điền bằng trung bình toàn cột; làm tròn về dạng nguyên nếu phù hợp
+    # 6. Điền giá trị thiếu bằng trung bình của loại dữ liệu cùng dạng (Group-based Mean Imputation)
+    # Nhóm theo 'quan_huyen' (cùng khu vực, cùng dạng nhà) để tính trung bình riêng cho từng nhóm
     numeric_cols = ["so_phong_ngu", "so_phong_tam", "nam_xay_dung", "so_tang"]
     impute_stats: Dict[str, Any] = {}
     for col in numeric_cols:
         df[col] = pd.to_numeric(df[col], errors="coerce")
-        col_mean = df[col].mean()
         missing_count = int(df[col].isna().sum())
-        if missing_count > 0 and not np.isnan(col_mean):
-            # Làm tròn về số nguyên gần nhất nếu cột là đếm số lượng phòng/tầng
-            fill_val = round(col_mean) if col in ("so_phong_ngu", "so_phong_tam", "so_tang") else round(col_mean, 1)
-            df[col] = df[col].fillna(fill_val)
-            impute_stats[col] = {"so_o_thieu": missing_count, "gia_tri_dien": fill_val}
-            print(f"[i] Điền {missing_count} ô thiếu cột '{col}' bằng trung bình = {fill_val}")
+        if missing_count > 0:
+            # 1. Tính trung bình của cột đó theo từng quận/huyện (cùng dạng khu vực)
+            group_means = df.groupby("quan_huyen")[col].transform("mean")
+            # 2. Trung bình chung toàn bộ (dùng dự phòng nếu nhóm không có giá trị)
+            overall_mean = df[col].mean()
 
-    # Các cột chuỗi không bắt buộc (duong_pho): giữ trống nếu thiếu — ghi 'N/a' khi lưu CSV
+            # Điền trung bình theo nhóm trước, nếu vẫn trống thì điền trung bình chung
+            filled_series = df[col].fillna(group_means).fillna(overall_mean)
+
+            # Làm tròn về số nguyên cho các đại lượng đếm (phòng ngủ, phòng tắm, số tầng, năm xây dựng)
+            fill_val = round(overall_mean) if col in ("so_phong_ngu", "so_phong_tam", "so_tang", "nam_xay_dung") else round(overall_mean, 1)
+            df[col] = filled_series.round().astype(float)
+
+            impute_stats[col] = {
+                "so_o_thieu": missing_count,
+                "phuong_phap": "Trung bình theo quận/huyện (cùng dạng khu vực)",
+                "trung_binh_chung": fill_val,
+            }
+            print(f"[i] Điền {missing_count} ô thiếu cột '{col}' bằng trung bình cùng dạng (quận/huyện) (TB chung: {fill_val})")
+
+    # Cột chuỗi không bắt buộc (duong_pho): điền Mode theo quận/huyện; nếu không có thì "Đang cập nhật"
+    str_optional_cols = ["duong_pho"]
+    for col in str_optional_cols:
+        missing_mask = df[col].isna() | (df[col].astype(str).str.strip().isin(["", "None", "nan", "N/a"]))
+        missing_count_str = int(missing_mask.sum())
+        if missing_count_str > 0:
+            def fill_mode_by_group(row):
+                if not (pd.isna(row[col]) or str(row[col]).strip() in ("", "None", "nan", "N/a")):
+                    return row[col]
+                group_vals = df.loc[
+                    (df["quan_huyen"] == row["quan_huyen"]) &
+                    (~(df[col].isna() | df[col].astype(str).str.strip().isin(["", "None", "nan", "N/a"]))),
+                    col
+                ]
+                mode_vals = group_vals.mode()
+                return str(mode_vals.iloc[0]) if len(mode_vals) > 0 else "Đang cập nhật"
+
+            df[col] = df.apply(fill_mode_by_group, axis=1)
+            impute_stats[col] = {
+                "so_o_thieu": missing_count_str,
+                "phuong_phap": "Giá trị phổ biến nhất (Mode) theo quận/huyện",
+                "trung_binh_chung": "Mode theo quận",
+            }
+            print(f"[i] Điền {missing_count_str} ô thiếu cột '{col}' bằng Mode theo quận/huyện")
+
     log_stats["impute_stats"] = impute_stats
 
     # 7. Sắp xếp: gia_ban tăng dần, dien_tich giảm dần
@@ -130,11 +166,11 @@ def clean_house_data(
     log_stats["so_luong_sau_lam_sach"] = len(df)
     print(f"[*] Thống kê làm sạch: {log_stats}")
 
-    # 8. Chỉ thay 'N/a' cho cột chuỗi bị thiếu (duong_pho) — cột số đã được điền ở trên
+    # 8. Tuyệt đối không để trống hay 'N/a' — chuyển mọi giá trị còn lại về dữ liệu hợp lệ
     df_csv = df.copy()
     for col in df_csv.columns:
         if df_csv[col].dtype == object:
-            df_csv[col] = df_csv[col].apply(lambda x: "N/a" if pd.isna(x) or str(x).strip() in ("", "None", "nan") else x)
+            df_csv[col] = df_csv[col].apply(lambda x: "Đang cập nhật" if pd.isna(x) or str(x).strip() in ("", "None", "nan", "N/a") else x)
 
     # Lưu UTF-8 with BOM (utf-8-sig)
     output_csv.parent.mkdir(parents=True, exist_ok=True)

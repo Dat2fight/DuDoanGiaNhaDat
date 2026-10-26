@@ -153,11 +153,17 @@ with info_col3:
     if clean_meta:
         impute = clean_meta.get("impute_stats", {})
         impute_lines = ""
-        col_vi = {"so_phong_ngu": "Phòng ngủ", "so_phong_tam": "Phòng tắm",
-                  "nam_xay_dung": "Năm xây dựng", "so_tang": "Số tầng"}
+        col_vi = {
+            "so_phong_ngu": "Phòng ngủ",
+            "so_phong_tam": "Phòng tắm",
+            "nam_xay_dung": "Năm xây dựng",
+            "so_tang": "Số tầng",
+            "duong_pho": "Đường/phố",
+        }
         for k, v in impute.items():
             label = col_vi.get(k, k)
-            impute_lines += f"<div>• Điền TB <i>{label}</i>: <span style='color:#2563eb;'>{v['so_o_thieu']} ô ← {v['gia_tri_dien']}</span></div>"
+            val = v.get("trung_binh_chung", v.get("gia_tri_dien", "TB cùng dạng"))
+            impute_lines += f"<div>• Điền TB <i>{label}</i>: <span style='color:#2563eb;'>{v['so_o_thieu']} ô (TB cùng quận: {val})</span></div>"
         st.markdown(
             f"""
             <div style="font-size: 12px; color: #475569; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 12px; line-height: 1.8;">

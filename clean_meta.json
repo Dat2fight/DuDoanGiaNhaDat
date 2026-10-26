@@ -9,19 +9,28 @@
   "impute_stats": {
     "so_phong_ngu": {
       "so_o_thieu": 3,
-      "gia_tri_dien": 4
+      "phuong_phap": "Trung bình theo quận/huyện (cùng dạng khu vực)",
+      "trung_binh_chung": 4
     },
     "so_phong_tam": {
       "so_o_thieu": 116,
-      "gia_tri_dien": 3
+      "phuong_phap": "Trung bình theo quận/huyện (cùng dạng khu vực)",
+      "trung_binh_chung": 3
     },
     "nam_xay_dung": {
       "so_o_thieu": 252,
-      "gia_tri_dien": 2018.2
+      "phuong_phap": "Trung bình theo quận/huyện (cùng dạng khu vực)",
+      "trung_binh_chung": 2018
     },
     "so_tang": {
       "so_o_thieu": 351,
-      "gia_tri_dien": 5
+      "phuong_phap": "Trung bình theo quận/huyện (cùng dạng khu vực)",
+      "trung_binh_chung": 5
+    },
+    "duong_pho": {
+      "so_o_thieu": 84,
+      "phuong_phap": "Giá trị phổ biến nhất (Mode) theo quận/huyện",
+      "trung_binh_chung": "Mode theo quận"
     }
   }
 }
