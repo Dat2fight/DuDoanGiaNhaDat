@@ -119,11 +119,11 @@ filtered_df = filtered_df[
     & (filtered_df["dien_tich_num"] <= area_range[1])
 ]
 
-# 2. Khối Thông tin dữ liệu & Bảng tỷ lệ N/a đầy đủ theo yêu cầu
+# 2. Khối Thông tin dữ liệu
 st.markdown("<div class='hi-card'>", unsafe_allow_html=True)
 st.markdown("<div style='font-weight: 700; margin-bottom: 12px; color: #0f172a;'>📊 Thông tin tập dữ liệu</div>", unsafe_allow_html=True)
 
-info_col1, info_col2, info_col3 = st.columns([1, 1.5, 1])
+info_col1, info_col3 = st.columns([1, 1])
 
 with info_col1:
     st.markdown(
@@ -148,35 +148,16 @@ with info_col1:
         unsafe_allow_html=True,
     )
 
-with info_col2:
-    # Tính tỷ lệ N/a cho toàn bộ 9 cột
-    na_stats = []
-    col_labels = {
-        "gia_ban": "Giá bán",
-        "dien_tich": "Diện tích",
-        "so_phong_ngu": "Phòng ngủ",
-        "so_phong_tam": "Phòng tắm",
-        "quan_huyen": "Quận/Huyện",
-        "phuong_xa": "Phường/Xã",
-        "duong_pho": "Đường/phố",
-        "nam_xay_dung": "Năm xây dựng",
-        "so_tang": "Số tầng",
-    }
-    for c in df_houses.columns:
-        if c in col_labels:
-            na_count = (df_houses[c] == "N/a").sum()
-            na_pct = round((na_count / len(df_houses)) * 100, 1)
-            na_stats.append({
-                "Thuộc tính": col_labels[c],
-                "Số lượng thiếu (N/a)": f"{na_count:,}",
-                "Tỷ lệ thiếu (%)": f"{na_pct}%",
-            })
-    st.markdown("<div style='font-size: 13px; font-weight: 600; color: #334155; margin-bottom: 6px;'>Tỷ lệ N/a đầy đủ từng cột:</div>", unsafe_allow_html=True)
-    st.dataframe(pd.DataFrame(na_stats), use_container_width=True, hide_index=True)
-
 with info_col3:
     st.markdown("<div style='font-size: 13px; font-weight: 600; color: #334155; margin-bottom: 6px;'>Thống kê lọc khi làm sạch:</div>", unsafe_allow_html=True)
     if clean_meta:
+        impute = clean_meta.get("impute_stats", {})
+        impute_lines = ""
+        col_vi = {"so_phong_ngu": "Phòng ngủ", "so_phong_tam": "Phòng tắm",
+                  "nam_xay_dung": "Năm xây dựng", "so_tang": "Số tầng"}
+        for k, v in impute.items():
+            label = col_vi.get(k, k)
+            impute_lines += f"<div>• Điền TB <i>{label}</i>: <span style='color:#2563eb;'>{v['so_o_thieu']} ô ← {v['gia_tri_dien']}</span></div>"
         st.markdown(
             f"""
             <div style="font-size: 12px; color: #475569; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 12px; line-height: 1.8;">
@@ -185,6 +166,9 @@ with info_col3:
                 <div>• Diện tích phi lý: <span style="color: #ef4444;">-{clean_meta.get('dien_tich_phi_ly', 0)}</span></div>
                 <div>• Đơn giá ngoại lai (IQR): <span style="color: #ef4444;">-{clean_meta.get('don_gia_ngoai_lai', 0)}</span></div>
                 <div>• Dữ liệu sạch nghiệm thu: <b style="color: #10b981;">{clean_meta.get('so_luong_sau_lam_sach', 0)}</b></div>
+                <hr style="border:none;border-top:1px solid #e2e8f0;margin:6px 0;">
+                <div style="font-weight:600;margin-bottom:2px;">Điền trung bình (Mean Imputation):</div>
+                {impute_lines}
             </div>
             """,
             unsafe_allow_html=True,

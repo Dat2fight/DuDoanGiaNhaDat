@@ -253,14 +253,3 @@ with p_col2:
     )
 
 st.markdown("</div>", unsafe_allow_html=True)
-
-
-# ----------------- HỘP HƯỚNG DẪN DÒNG LỆNH CLUSTERPLOT.PY -----------------
-st.markdown("<div class='hi-card'>", unsafe_allow_html=True)
-st.markdown("<div style='font-weight: 700; margin-bottom: 6px; color: #0f172a;'>💻 Chạy clusterPlot.py từ dòng lệnh</div>", unsafe_allow_html=True)
-feats_str = ",".join(chosen_features[:3])
-cmd_str = f"python clusterPlot.py --k {selected_k} --features {feats_str}"
-st.code(cmd_str, language="bash")
-st.caption("Lệnh trên sẽ in bảng mô tả các cụm ra terminal và tự động lưu biểu đồ PCA 2D chất lượng cao vào thư mục figures/.")
-st.markdown("</div>", unsafe_allow_html=True)
-

@@ -106,16 +106,35 @@ def clean_house_data(
     ]
     df = df[columns_order]
 
-    # 6. Sắp xếp: gia_ban tăng dần, dien_tich giảm dần
+    # 6. Điền giá trị thiếu bằng trung bình của cùng loại dữ liệu (Mean Imputation)
+    # Các cột số: điền bằng trung bình toàn cột; làm tròn về dạng nguyên nếu phù hợp
+    numeric_cols = ["so_phong_ngu", "so_phong_tam", "nam_xay_dung", "so_tang"]
+    impute_stats: Dict[str, Any] = {}
+    for col in numeric_cols:
+        df[col] = pd.to_numeric(df[col], errors="coerce")
+        col_mean = df[col].mean()
+        missing_count = int(df[col].isna().sum())
+        if missing_count > 0 and not np.isnan(col_mean):
+            # Làm tròn về số nguyên gần nhất nếu cột là đếm số lượng phòng/tầng
+            fill_val = round(col_mean) if col in ("so_phong_ngu", "so_phong_tam", "so_tang") else round(col_mean, 1)
+            df[col] = df[col].fillna(fill_val)
+            impute_stats[col] = {"so_o_thieu": missing_count, "gia_tri_dien": fill_val}
+            print(f"[i] Điền {missing_count} ô thiếu cột '{col}' bằng trung bình = {fill_val}")
+
+    # Các cột chuỗi không bắt buộc (duong_pho): giữ trống nếu thiếu — ghi 'N/a' khi lưu CSV
+    log_stats["impute_stats"] = impute_stats
+
+    # 7. Sắp xếp: gia_ban tăng dần, dien_tich giảm dần
     df = df.sort_values(by=["gia_ban", "dien_tich"], ascending=[True, False]).reset_index(drop=True)
 
     log_stats["so_luong_sau_lam_sach"] = len(df)
     print(f"[*] Thống kê làm sạch: {log_stats}")
 
-    # 7. Thay thế NaN bằng 'N/a' trước khi lưu file CSV
+    # 8. Chỉ thay 'N/a' cho cột chuỗi bị thiếu (duong_pho) — cột số đã được điền ở trên
     df_csv = df.copy()
     for col in df_csv.columns:
-        df_csv[col] = df_csv[col].apply(lambda x: "N/a" if pd.isna(x) or str(x).strip() in ("", "None", "nan") else x)
+        if df_csv[col].dtype == object:
+            df_csv[col] = df_csv[col].apply(lambda x: "N/a" if pd.isna(x) or str(x).strip() in ("", "None", "nan") else x)
 
     # Lưu UTF-8 with BOM (utf-8-sig)
     output_csv.parent.mkdir(parents=True, exist_ok=True)

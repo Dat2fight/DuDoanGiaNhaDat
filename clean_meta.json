@@ -5,5 +5,23 @@
   "dien_tich_phi_ly": 2,
   "don_gia_ngoai_lai": 8,
   "thieu_quan_huyen": 0,
-  "so_luong_sau_lam_sach": 728
+  "so_luong_sau_lam_sach": 728,
+  "impute_stats": {
+    "so_phong_ngu": {
+      "so_o_thieu": 3,
+      "gia_tri_dien": 4
+    },
+    "so_phong_tam": {
+      "so_o_thieu": 116,
+      "gia_tri_dien": 3
+    },
+    "nam_xay_dung": {
+      "so_o_thieu": 252,
+      "gia_tri_dien": 2018.2
+    },
+    "so_tang": {
+      "so_o_thieu": 351,
+      "gia_tri_dien": 5
+    }
+  }
 }
