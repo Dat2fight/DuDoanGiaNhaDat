@@ -7,13 +7,6 @@ import streamlit as st
 
 from src.ui import apply_custom_css, render_sidebar_info
 
-st.set_page_config(
-    page_title="HouseInsight - Trang chủ",
-    page_icon="🏠",
-    layout="wide",
-    initial_sidebar_state="expanded",
-)
-
 apply_custom_css()
 render_sidebar_info()
 
@@ -71,7 +64,7 @@ with col2:
     st.markdown(
         f"""
         <div class="metric-card">
-            <div class="metric-icon" style="background: #f0fdf4; color: #16a34a;">🏢</div>
+            <div class="metric-icon" style="background: #f0fdf4; color: #16a34a;">📍</div>
             <div>
                 <div class="metric-label">Số khu vực</div>
                 <div class="metric-value">{num_districts}</div>
@@ -86,7 +79,7 @@ with col3:
     st.markdown(
         f"""
         <div class="metric-card">
-            <div class="metric-icon" style="background: #fff7ed; color: #ea580c;">🪙</div>
+            <div class="metric-icon" style="background: #fff7ed; color: #ea580c;">💰</div>
             <div>
                 <div class="metric-label">Giá trung vị</div>
                 <div class="metric-value">{median_price_ty:.2f} tỷ VNĐ</div>
@@ -100,7 +93,7 @@ with col4:
     st.markdown(
         f"""
         <div class="metric-card">
-            <div class="metric-icon" style="background: #faf5ff; color: #9333ea;">📈</div>
+            <div class="metric-icon" style="background: #faf5ff; color: #9333ea;">🤖</div>
             <div>
                 <div class="metric-label">R² mô hình tốt nhất</div>
                 <div class="metric-value">{best_r2:.2f}</div>
@@ -117,7 +110,7 @@ st.markdown(
     """
     <div class="hi-card">
         <h3 style="font-size: 17px; font-weight: 700; color: #0f172a; margin-bottom: 16px;">
-            🧭 Hướng dẫn sử dụng hệ thống
+            📋 Hướng dẫn sử dụng hệ thống
         </h3>
         <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;">
             <div class="guide-step">
@@ -150,10 +143,9 @@ st.markdown(
 st.markdown(
     """
     <div class="footer-note">
-        <div>🔵 <b>Nguồn dữ liệu:</b> <i>alonhadat.com.vn & VN Housing Dataset (Hà Nội)</i></div>
+        <div>📊 <b>Nguồn dữ liệu:</b> <i>alonhadat.com.vn & VN Housing Dataset (Hà Nội)</i></div>
         <div>⚠️ <b>Lưu ý:</b> <i>Giá dự đoán chỉ mang tính tham khảo, không phải giá giao dịch chính thức ngoài thị trường.</i></div>
     </div>
     """,
     unsafe_allow_html=True,
 )
-

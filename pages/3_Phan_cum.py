@@ -1,4 +1,4 @@
-"""Trang 3: Phân cụm - Nhóm các căn nhà có đặc điểm tương đồng (K-Means + PCA)."""
+﻿"""Trang 3: Phân cụm - Nhóm các căn nhà có đặc điểm tương đồng (K-Means + PCA)."""
 
 from pathlib import Path
 import numpy as np
@@ -18,12 +18,6 @@ from src.clustering import (
 from src.stats import load_clean_data
 from src.ui import apply_custom_css, render_sidebar_info
 
-st.set_page_config(
-    page_title="HouseInsight - Phân cụm",
-    page_icon="🗂️",
-    layout="wide",
-    initial_sidebar_state="expanded",
-)
 
 apply_custom_css()
 render_sidebar_info()

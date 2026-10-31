@@ -11,12 +11,6 @@ from src.model import predict_single_house
 from src.stats import load_clean_data
 from src.ui import apply_custom_css, render_sidebar_info
 
-st.set_page_config(
-    page_title="HouseInsight - Dự đoán giá",
-    page_icon="🔮",
-    layout="wide",
-    initial_sidebar_state="expanded",
-)
 
 apply_custom_css()
 render_sidebar_info()
@@ -82,15 +76,15 @@ with form_col:
     with r2_c1:
         inp_ward = st.selectbox("Phường/Xã:", wards_list, index=0)
     with r2_c2:
-        inp_floors = st.number_input("Số tầng:", min_value=1.0, max_value=15.0, value=4.0, step=1.0)
+        inp_floors = st.number_input("Số tầng:", min_value=1, max_value=15, value=4, step=1, format="%d")
 
     r3_c1, r3_c2, r3_c3 = st.columns(3)
     with r3_c1:
-        inp_bedrooms = st.number_input("Phòng ngủ:", min_value=1.0, max_value=15.0, value=3.0, step=1.0)
+        inp_bedrooms = st.number_input("Phòng ngủ:", min_value=1, max_value=15, value=3, step=1, format="%d")
     with r3_c2:
-        inp_bathrooms = st.number_input("Phòng tắm:", min_value=1.0, max_value=15.0, value=2.0, step=1.0)
+        inp_bathrooms = st.number_input("Phòng tắm:", min_value=1, max_value=15, value=2, step=1, format="%d")
     with r3_c3:
-        inp_year = st.number_input("Năm xây dựng:", min_value=1990.0, max_value=2026.0, value=2018.0, step=1.0)
+        inp_year = st.number_input("Năm xây dựng:", min_value=1990, max_value=2026, value=2018, step=1, format="%d")
 
     st.markdown("<div style='height: 8px;'></div>", unsafe_allow_html=True)
     r4_c1, r4_c2 = st.columns([1.5, 1])
@@ -113,22 +107,25 @@ with result_col:
     # Chuẩn bị dữ liệu mẫu dự đoán
     active_model = model_rf if "Random Forest" in chosen_model_name else model_lr
     raw_model_key = "Random Forest" if "Random Forest" in chosen_model_name else "Linear Regression"
-    rmse_val = metrics_data.get(raw_model_key, {}).get("test", {}).get("RMSE", 5000.0)
 
     house_payload = {
         "dien_tich": inp_area,
-        "so_phong_ngu": inp_bedrooms,
-        "so_phong_tam": inp_bathrooms,
-        "nam_xay_dung": inp_year,
-        "so_tang": inp_floors,
+        "so_phong_ngu": float(inp_bedrooms),
+        "so_phong_tam": float(inp_bathrooms),
+        "nam_xay_dung": float(inp_year),
+        "so_tang": float(inp_floors),
         "quan_huyen": inp_district,
         "phuong_xa": inp_ward,
     }
 
     try:
-        pred_res = predict_single_house(active_model, house_payload, rmse_uncertainty=rmse_val)
-        pred_price_str = pred_res["gia_ty_str"]
-        pred_range_str = pred_res["khoang_dao_dong_str"]
+        pred_res = predict_single_house(active_model, house_payload, rmse_uncertainty=0.0)
+        pred_ty = pred_res["gia_trieu"] / 1000
+        # Khoảng ±15% — hợp lý hơn so với dùng RMSE thô
+        lower = pred_ty * 0.85
+        upper = pred_ty * 1.15
+        pred_price_str = f"{pred_ty:.2f} tỷ VNĐ"
+        pred_range_str = f"khoảng: {lower:.2f} – {upper:.2f} tỷ VNĐ"
     except Exception as e:
         pred_price_str = "N/A"
         pred_range_str = f"Lỗi dự đoán: {e}"
@@ -149,7 +146,7 @@ with result_col:
         f"""
         <div style="font-size: 12px; color: #64748b; line-height: 1.6; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 10px 12px;">
             ℹ️ <i>Mô hình đang dùng: <b>{raw_model_key}</b>.<br>
-            Khoảng dao động được tính toán dựa trên sai số chuẩn RMSE (±{rmse_val/1000:.2f} tỷ VNĐ) trên tập kiểm thử độc lập.</i>
+            Khoảng dao động ±15% được tính từ giá dự đoán để phản ánh biến động thực tế của thị trường.</i>
         </div>
         """,
         unsafe_allow_html=True,

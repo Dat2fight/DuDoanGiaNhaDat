@@ -10,12 +10,6 @@ import streamlit as st
 from src.stats import analyze_distribution, compare_districts, get_top_cheapest_and_most_expensive, load_clean_data
 from src.ui import apply_custom_css, render_sidebar_info
 
-st.set_page_config(
-    page_title="HouseInsight - Thống kê",
-    page_icon="📊",
-    layout="wide",
-    initial_sidebar_state="expanded",
-)
 
 apply_custom_css()
 render_sidebar_info()
@@ -91,17 +85,18 @@ with row1_col2:
 
     cheapest_3, expensive_3 = get_top_cheapest_and_most_expensive(df_clean, n=3)
 
-    t_col1, t_col2 = st.columns(2)
+    t_col1, t_col2 = st.columns([1, 1])
 
     with t_col1:
         st.markdown("<div style='font-size: 13px; font-weight: 700; color: #16a34a; margin-bottom: 6px;'>🟢 3 căn rẻ nhất</div>", unsafe_allow_html=True)
         ch_display = []
         for _, r in cheapest_3.iterrows():
-            loc = f"{r['quan_huyen']}" if pd.isna(r['phuong_xa']) else f"{r['phuong_xa']}, {r['quan_huyen']}"
+            # Rút gọn tên: chỉ lấy quận/huyện để tránh tràn cột
+            loc = str(r['quan_huyen'])
             ch_display.append({
-                "Vị trí": loc,
-                "Diện tích": f"{r['dien_tich']:.0f} m²",
-                "Giá bán": f"{r['gia_ban']:.0f} tr" if r['gia_ban'] < 1000 else f"{r['gia_ban']/1000:.2f} tỷ",
+                "Khu vực": loc,
+                "DT (m²)": f"{r['dien_tich']:.0f}",
+                "Giá": f"{r['gia_ban']:.0f} tr" if r['gia_ban'] < 1000 else f"{r['gia_ban']/1000:.2f} tỷ",
             })
         st.dataframe(pd.DataFrame(ch_display), use_container_width=True, hide_index=True)
 
@@ -109,11 +104,11 @@ with row1_col2:
         st.markdown("<div style='font-size: 13px; font-weight: 700; color: #ea580c; margin-bottom: 6px;'>🔴 3 căn đắt nhất</div>", unsafe_allow_html=True)
         ex_display = []
         for _, r in expensive_3.iterrows():
-            loc = f"{r['quan_huyen']}" if pd.isna(r['phuong_xa']) else f"{r['phuong_xa']}, {r['quan_huyen']}"
+            loc = str(r['quan_huyen'])
             ex_display.append({
-                "Vị trí": loc,
-                "Diện tích": f"{r['dien_tich']:.0f} m²",
-                "Giá bán": f"{r['gia_ban']/1000:.1f} tỷ",
+                "Khu vực": loc,
+                "DT (m²)": f"{r['dien_tich']:.0f}",
+                "Giá (tỷ)": f"{r['gia_ban']/1000:.1f}",
             })
         st.dataframe(pd.DataFrame(ex_display), use_container_width=True, hide_index=True)
 

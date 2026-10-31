@@ -1,4 +1,4 @@
-"""Trang 1: Dữ liệu - Xem, lọc và tải dữ liệu nhà ở đã thu thập."""
+﻿"""Trang 1: Dữ liệu - Xem, lọc và tải dữ liệu nhà ở đã thu thập."""
 
 import json
 from pathlib import Path
@@ -7,12 +7,6 @@ import streamlit as st
 
 from src.ui import apply_custom_css, render_sidebar_info
 
-st.set_page_config(
-    page_title="HouseInsight - Dữ liệu",
-    page_icon="📋",
-    layout="wide",
-    initial_sidebar_state="expanded",
-)
 
 apply_custom_css()
 render_sidebar_info()
